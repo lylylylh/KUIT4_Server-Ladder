@@ -4,52 +4,54 @@ import ladder.GreaterThanOne;
 import ladder.LadderGame;
 import ladder.LadderGameFactory;
 import ladder.Position;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 class RandomCreatorTest {
+
     @Test
-    void 자동_사다리_생성_확인() {
-        //given
+    @DisplayName("자동 사다리 생성 확인")
+    void random_ladder_creation_check() {
+        // given
         GreaterThanOne numberOfRow = GreaterThanOne.from(3);
         GreaterThanOne numberOfPerson = GreaterThanOne.from(5);
 
-        //when
-        LadderRandomCreator randomCreator = new LadderRandomCreator(numberOfRow, numberOfPerson);
+        // when
+        LadderGame ladderGame = LadderGameFactory.createRandomLadderGame(numberOfRow, numberOfPerson);
 
-        //then
-        assertThat(randomCreator).isNotNull();
+        // then
+        assertThat(ladderGame).isNotNull();
     }
 
     @Test
-    void 자동_사다리_사람_예외_처리_확인() {
-        //when
+    @DisplayName("자동 사다리 예외 처리 확인")
+    void random_ladder_exception_check() {
+        // given
         GreaterThanOne numberOfPerson = GreaterThanOne.from(3);
-        LadderRandomCreator ladderRandomCreator = new LadderRandomCreator(GreaterThanOne.from(2), numberOfPerson);
-        LadderGame ladderGame = LadderGameFactory.createRandomLadderGame(ladderRandomCreator);
 
-        //given
+        // when
+        LadderGame ladderGame = LadderGameFactory.createRandomLadderGame(GreaterThanOne.from(2), numberOfPerson);
+
+        // then
         Position position = Position.from(4);
-
-        //then
         assertThatThrownBy(() -> ladderGame.run(position))
                 .isInstanceOf(IllegalArgumentException.class);
     }
+
     @Test
-    void 자동_사다리_결과_확인() {
-        //when
+    @DisplayName("자동 사다리 결과 확인")
+    void random_ladder_result_check() {
+        // given
         GreaterThanOne numberOfPerson = GreaterThanOne.from(8);
         GreaterThanOne row = GreaterThanOne.from(8);
-        LadderRandomCreator ladderRandomCreator = new LadderRandomCreator(row, numberOfPerson);
-        LadderGame ladderGame = LadderGameFactory.createRandomLadderGame(ladderRandomCreator);
 
-        //given
+        // when
+        LadderGame ladderGame = LadderGameFactory.createRandomLadderGame(row, numberOfPerson);
+
+        // then
         Position position = Position.from(0);
-
-        //then
         assertThat(ladderGame.run(position)).isNotNull();
     }
 }
